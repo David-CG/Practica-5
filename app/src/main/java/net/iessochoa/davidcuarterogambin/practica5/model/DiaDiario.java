@@ -1,10 +1,14 @@
 package net.iessochoa.davidcuarterogambin.practica5.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.provider.BaseColumns;
 
+import java.text.DateFormat;
 import java.util.Date;
+import java.util.Locale;
 
-class DiaDiario {
+class DiaDiario implements Parcelable {
     public static final String TABLE_NAME="diario";
     public static final String ID= BaseColumns._ID;
     public static final String FECHA="fecha";
@@ -18,4 +22,173 @@ class DiaDiario {
     private String resumen;
     private String contenido;
     private String fotoUri;
+
+    // ************************* Constructores *************************
+
+    public DiaDiario(Date fecha, int valoracionDia, String resumen, String contenido, String fotoUri) {
+        this.fecha = fecha;
+        this.valoracionDia = valoracionDia;
+        this.resumen = resumen;
+        this.contenido = contenido;
+        this.fotoUri = fotoUri;
+    }
+
+    public DiaDiario(Date fecha, int valoracionDia, String resumen, String contenido) {
+        this.fecha = fecha;
+        this.valoracionDia = valoracionDia;
+        this.resumen = resumen;
+        this.contenido = contenido;
+        this.fotoUri = "";
+    }
+
+    // *********************** Getters y setters ***********************
+
+    public static String getTableName() {
+        return TABLE_NAME;
+    }
+
+    public static String getID() {
+        return ID;
+    }
+
+    public static String getFECHA() {
+        return FECHA;
+    }
+
+    public static String getValoracionDia() {
+        return VALORACION_DIA;
+    }
+
+    public void setValoracionDia(int valoracionDia) {
+        this.valoracionDia = valoracionDia;
+    }
+
+    public String getResumen() {
+        return resumen;
+    }
+
+    public void setResumen(String resumen) {
+        this.resumen = resumen;
+    }
+
+    public String getContenido() {
+        return contenido;
+    }
+
+    public void setContenido(String contenido) {
+        this.contenido = contenido;
+    }
+
+    public static String getRESUMEN() {
+        return RESUMEN;
+    }
+
+    public static String getCONTENIDO() {
+        return CONTENIDO;
+    }
+
+    public static String getFotoUri() {
+        return FOTO_URI;
+    }
+
+    public void setFotoUri(String fotoUri) {
+        this.fotoUri = fotoUri;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public int getValoracionResumida() {
+        if (valoracionDia < 5) {
+            return 1;
+        } else if (valoracionDia < 8) {
+            return 2;
+        } else {
+            return 3;
+        }
+    }
+
+    public static int getValoracionResumida(int valoracion) {
+        if (valoracion < 5) {
+            return 1;
+        } else if (valoracion < 8) {
+            return 2;
+        } else {
+            return 3;
+        }
+    }
+
+    public String getFechaFormatoLocal() {
+        DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM,
+                Locale.getDefault());
+        return df.format(fecha);
+    }
+
+    public static String getFechaFormatoLocal(Date fechaDia) {
+        DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM,
+                Locale.getDefault());
+        return df.format(fechaDia);
+    }
+
+    // *************************** Parcerable **************************
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeLong(this.fecha != null ? this.fecha.getTime() : -1);
+        dest.writeInt(this.valoracionDia);
+        dest.writeString(this.resumen);
+        dest.writeString(this.contenido);
+        dest.writeString(this.fotoUri);
+    }
+
+    public void readFromParcel(Parcel source) {
+        this.id = source.readInt();
+        long tmpFecha = source.readLong();
+        this.fecha = tmpFecha == -1 ? null : new Date(tmpFecha);
+        this.valoracionDia = source.readInt();
+        this.resumen = source.readString();
+        this.contenido = source.readString();
+        this.fotoUri = source.readString();
+    }
+
+    protected DiaDiario(Parcel in) {
+        this.id = in.readInt();
+        long tmpFecha = in.readLong();
+        this.fecha = tmpFecha == -1 ? null : new Date(tmpFecha);
+        this.valoracionDia = in.readInt();
+        this.resumen = in.readString();
+        this.contenido = in.readString();
+        this.fotoUri = in.readString();
+    }
+
+    public static final Parcelable.Creator<DiaDiario> CREATOR = new Parcelable.Creator<DiaDiario>() {
+        @Override
+        public DiaDiario createFromParcel(Parcel source) {
+            return new DiaDiario(source);
+        }
+
+        @Override
+        public DiaDiario[] newArray(int size) {
+            return new DiaDiario[size];
+        }
+    };
 }
