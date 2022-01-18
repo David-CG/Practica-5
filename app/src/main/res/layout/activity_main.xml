@@ -31,13 +31,13 @@
                     android:id="@+id/rbAsc"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Asc" />
+                    android:text="@string/radio_button_ascendente" />
 
                 <RadioButton
                     android:id="@+id/rbDesc"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="Desc" />
+                    android:text="@string/radio_button_descendente" />
             </RadioGroup>
         </androidx.appcompat.widget.Toolbar>
 
@@ -48,12 +48,11 @@
         android:layout_height="match_parent" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/fabNuevo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:contentDescription="Añadir"
         app:srcCompat="@android:drawable/ic_input_add"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck,ImageContrastCheck" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

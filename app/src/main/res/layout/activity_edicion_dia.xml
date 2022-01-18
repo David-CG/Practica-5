@@ -26,58 +26,66 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/ivElegirFecha"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginStart="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/tvEdiccionFecha"
-                app:layout_constraintStart_toEndOf="@+id/tvEdiccionFecha"
-                app:layout_constraintTop_toTopOf="@+id/tvEdiccionFecha"
-                app:srcCompat="@android:drawable/ic_menu_my_calendar" />
-
             <TextView
-                android:id="@+id/tvEdiccionFecha"
+                android:id="@+id/tvFecha"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/ivFecha"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/tvFecha"
+                app:layout_constraintStart_toEndOf="@+id/tvFecha"
+                app:layout_constraintTop_toTopOf="@+id/tvFecha"
+                app:srcCompat="@android:drawable/ic_menu_month"
+                tools:ignore="ImageContrastCheck" />
+
+            <EditText
+                android:id="@+id/etResumen"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="2dp"
+                android:ems="10"
+                android:hint="@string/Resumen_del_dia"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                app:layout_constraintBottom_toBottomOf="@+id/ivFecha"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/ivFecha"
+                app:layout_constraintTop_toTopOf="@+id/ivFecha" />
+
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/tvValoracion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="32dp"
-                android:text="Valora el día:"
-                app:layout_constraintStart_toStartOf="@+id/tvEdiccionFecha"
-                app:layout_constraintTop_toBottomOf="@+id/tvEdiccionFecha" />
+                android:text="@string/Valorar_vida"
+                app:layout_constraintStart_toStartOf="@+id/tvFecha"
+                app:layout_constraintTop_toBottomOf="@+id/tvFecha" />
 
             <Spinner
-                android:id="@+id/spEditarValoracion"
-                android:layout_width="116dp"
-                android:layout_height="wrap_content"
+                android:id="@+id/spValoracion"
+                android:layout_width="100dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/textView2"
-                app:layout_constraintStart_toEndOf="@+id/textView2"
-                app:layout_constraintTop_toTopOf="@+id/textView2"
-                tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
-
-            <EditText
-                android:id="@+id/etEditarResumen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="2dp"
-                android:ems="10"
-                android:hint="Resumen breve del día"
-                android:inputType="textPersonName"
+                android:entries="10"
                 android:minHeight="48dp"
-                app:layout_constraintBottom_toBottomOf="@+id/ivElegirFecha"
-                app:layout_constraintStart_toEndOf="@+id/ivElegirFecha"
-                app:layout_constraintTop_toTopOf="@+id/ivElegirFecha" />
+                android:spinnerMode="dropdown"
+                app:layout_constraintBottom_toBottomOf="@+id/tvValoracion"
+                app:layout_constraintStart_toEndOf="@+id/tvValoracion"
+                app:layout_constraintTop_toTopOf="@+id/tvValoracion"
+                tools:ignore="SpeakableTextPresentCheck" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -91,7 +99,7 @@
         app:layout_constraintGuide_begin="158dp" />
 
     <ScrollView
-        android:id="@+id/scrollView2"
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="2dp"
@@ -104,20 +112,21 @@
         app:layout_constraintVertical_bias="0.0">
 
         <EditText
-            android:id="@+id/etEditarDiario"
+            android:id="@+id/etDiario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:hint="Cuentale al diario tu día..."
-            android:inputType="textMultiLine|textPersonName"
+            android:hint="@string/Contar_dia"
+            android:importantForAutofill="no"
+            android:inputType="textMultiLine"
             android:minHeight="48dp" />
     </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabGuardar"
-        android:layout_width="57dp"
-        android:layout_height="51dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:layout_margin="16dp"
         android:src="@android:drawable/ic_menu_save"

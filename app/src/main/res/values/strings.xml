@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Practica 5</string>
+    <string name="Resumen_del_dia">Resumen breve del día</string>
+    <string name="Valorar_vida">Valorar vida</string>
+    <string name="Contar_dia">Cuenta a tu diario tu día...</string>
+    <string name="radio_button_ascendente">Asc</string>
+    <string name="radio_button_descendente">Desc</string>
 </resources>
