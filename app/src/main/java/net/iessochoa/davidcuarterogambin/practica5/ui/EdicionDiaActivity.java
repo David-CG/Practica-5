@@ -4,6 +4,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,17 +19,18 @@ import android.widget.TextView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.iessochoa.davidcuarterogambin.practica5.R;
-
-import java.util.Date;
+import net.iessochoa.davidcuarterogambin.practica5.model.DiaDiario;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class EdicionDiaActivity extends AppCompatActivity {
 
     static final String EXTRA_DIA = "net.iessochoa.davidcuartero.practica5.EdicionDiaActivity.DiaCreado";
 
+    DiaDiario dia;
+
     TextView tvFecha;
     ImageView ivFecha;
-    EditText etResumen, etDiario;
+    EditText etResumen, etContenido;
     Spinner spValoracion;
     FloatingActionButton fabGuardar;
 
@@ -48,7 +50,11 @@ public class EdicionDiaActivity extends AppCompatActivity {
         });
 
         fabGuardar.setOnClickListener(view -> {
-            //getIntent().putExtra(EXTRA_DIA, (Parcelable) dia);
+            if ((etResumen.getText() != null) && (etContenido.getText() != null)) {
+                getIntent().putExtra(EXTRA_DIA, (Parcelable) dia);
+            } else {
+
+            }
         });
     }
 
@@ -58,11 +64,11 @@ public class EdicionDiaActivity extends AppCompatActivity {
 
         DatePickerDialog dialogo = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            public void onDateSet(DatePicker view, int anyo, int mes, int dia) {
                 Calendar calendar = Calendar.getInstance();
-                calendar.set(year, monthOfYear, dayOfMonth);
+                calendar.set(anyo, mes, dia);
 
-                EdicionDiaActivity.this.tvFecha.setText(dayOfMonth + "/" + monthOfYear + "/" + year);
+                EdicionDiaActivity.this.tvFecha.setText(dia + "/" + mes + "/" + anyo);
             }
 
         }, newCalendar.get(Calendar.YEAR),
@@ -76,7 +82,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
         tvFecha = findViewById(R.id.tvFecha);
         ivFecha = findViewById(R.id.ivFecha);
         etResumen = findViewById(R.id.etResumen);
-        etDiario = findViewById(R.id.etDiario);
+        etContenido = findViewById(R.id.etContenido);
         spValoracion = findViewById(R.id.spValoracion);
         fabGuardar = findViewById(R.id.fabGuardar);
     }

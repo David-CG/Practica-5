@@ -4,11 +4,17 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.BaseColumns;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-class DiaDiario implements Parcelable {
+@Entity
+public class DiaDiario implements Parcelable {
     public static final String TABLE_NAME="diario";
     public static final String ID= BaseColumns._ID;
     public static final String FECHA="fecha";
@@ -16,11 +22,27 @@ class DiaDiario implements Parcelable {
     public static final String RESUMEN="resumen";
     public static final String CONTENIDO="contenido";
     public static final String FOTO_URI="foto_uri";
+
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = ID)
+    @NonNull
     private int id;
+
+    @ColumnInfo(name = FECHA)
     private Date fecha;
+
+    @ColumnInfo(name = VALORACION_DIA)
     private int valoracionDia;
+
+    @ColumnInfo(name = RESUMEN)
+    @NonNull
     private String resumen;
+
+    @ColumnInfo(name = CONTENIDO)
+    @NonNull
     private String contenido;
+
+    @ColumnInfo(name = FOTO_URI)
     private String fotoUri;
 
     // ************************* Constructores *************************
