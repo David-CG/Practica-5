@@ -5,4 +5,6 @@
     <string name="Contar_dia">Cuenta a tu diario tu día...</string>
     <string name="radio_button_ascendente">Asc</string>
     <string name="radio_button_descendente">Desc</string>
+    <string name="titulo_campos_incompletos">Campos incompletos</string>
+    <string name="cont_campos_incompletos">Completa todos los campos para guardar la valoración.</string>
 </resources>

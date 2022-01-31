@@ -32,10 +32,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
-                android:textSize="20sp"
+                android:textAlignment="center"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="1/1/2022" />
 
             <ImageView
                 android:id="@+id/ivFecha"
@@ -79,7 +81,6 @@
                 android:layout_width="100dp"
                 android:layout_height="50dp"
                 android:layout_marginStart="8dp"
-                android:entries="10"
                 android:minHeight="48dp"
                 android:spinnerMode="dropdown"
                 app:layout_constraintBottom_toBottomOf="@+id/tvValoracion"
@@ -106,7 +107,7 @@
         android:layout_marginEnd="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardView"
         app:layout_constraintVertical_bias="0.0">
