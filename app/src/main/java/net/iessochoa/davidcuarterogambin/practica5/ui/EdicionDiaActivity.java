@@ -4,14 +4,15 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,8 +32,6 @@ import java.util.Date;
 public class EdicionDiaActivity extends AppCompatActivity {
 
     static final String EXTRA_DIA = "net.iessochoa.davidcuartero.practica5.EdicionDiaActivity.DiaCreado";
-
-    DiaDiario dia;
 
     TextView tvFecha;
     ImageView ivFecha;
@@ -55,13 +54,10 @@ public class EdicionDiaActivity extends AppCompatActivity {
             }
         });
 
-        fabGuardar.setOnClickListener(view -> {
-            if ((etResumen.getText() != null) && (etContenido.getText() != null)) {
-                getIntent().putExtra(EXTRA_DIA, (Parcelable) dia);
-            } else {
+        spValoracion.setAdapter(ArrayAdapter.createFromResource(this, R.array.spValoracion, ));
+        spValoracion.setSelection(5);
 
-            }
-        });
+        fabGuardar.setOnClickListener(view -> onClickGuardar());
     }
 
     public void onClickFecha() {
@@ -69,6 +65,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
         Calendar newCalendar = Calendar.getInstance();
 
         DatePickerDialog dialogo = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @SuppressLint("SimpleDateFormat")
             @Override
             public void onDateSet(DatePicker view, int anyo, int mes, int dia) {
                 Calendar calendar = Calendar.getInstance();
@@ -86,12 +83,13 @@ public class EdicionDiaActivity extends AppCompatActivity {
 
     public View.OnClickListener onClickGuardar() {
         return new View.OnClickListener() {
+            @SuppressLint("SimpleDateFormat")
             @Override
             public void onClick(View view) {
                 etResumen.setText(etResumen.getText().toString().trim());
                 etContenido.setText(etContenido.getText().toString().trim());
                 if ((etResumen.getText().toString().equals("")) || (etContenido.getText().toString().equals(""))) {
-                    dialogoCamposIncompletos();
+                    compruebaCampos();
                 } else {
                     Intent resultado = new Intent();
                     Date fecha = null;
@@ -108,16 +106,16 @@ public class EdicionDiaActivity extends AppCompatActivity {
         };
     }
 
-    private void dialogoCamposIncompletos() {
-        AlertDialog.Builder dlgAcercaDe = new AlertDialog.Builder(this);
-        dlgAcercaDe.setTitle(R.string.titulo_campos_incompletos);
-        dlgAcercaDe.setMessage(R.string.cont_campos_incompletos);
-        dlgAcercaDe.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+    private void compruebaCampos() {
+        AlertDialog.Builder dialogoCampos = new AlertDialog.Builder(this);
+        dialogoCampos.setTitle(R.string.titulo_campos_incompletos);
+        dialogoCampos.setMessage(R.string.cont_campos_incompletos);
+        dialogoCampos.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
             }
         });
-        dlgAcercaDe.show();
+        dialogoCampos.show();
     }
 
     private void iniciaViews() {
