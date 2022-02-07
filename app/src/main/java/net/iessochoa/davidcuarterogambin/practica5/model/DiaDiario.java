@@ -7,21 +7,25 @@ import android.provider.BaseColumns;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-@Entity
+@Entity(tableName = DiaDiario.TABLE_NAME,
+        indices = {@Index(value = {DiaDiario.FECHA}, unique = true)})
 public class DiaDiario implements Parcelable {
-    public static final String TABLE_NAME="diario";
-    public static final String ID= BaseColumns._ID;
-    public static final String FECHA="fecha";
-    public static final String VALORACION_DIA="valoracion_dia";
-    public static final String RESUMEN="resumen";
-    public static final String CONTENIDO="contenido";
-    public static final String FOTO_URI="foto_uri";
+
+    public static final String TABLE_NAME = "diario";
+    public static final String ID = BaseColumns._ID;
+    public static final String FECHA = "fecha";
+    public static final String VALORACION_DIA = "valoracion_dia";
+    public static final String RESUMEN = "resumen";
+    public static final String CONTENIDO = "contenido";
+    public static final String FOTO_URI = "foto_uri";
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = ID)
@@ -55,6 +59,7 @@ public class DiaDiario implements Parcelable {
         this.fotoUri = fotoUri;
     }
 
+    @Ignore
     public DiaDiario(Date fecha, int valoracionDia, String resumen, String contenido) {
         this.fecha = fecha;
         this.valoracionDia = valoracionDia;

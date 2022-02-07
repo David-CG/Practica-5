@@ -54,7 +54,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
             }
         });
 
-        spValoracion.setAdapter(ArrayAdapter.createFromResource(this, R.array.spValoracion, ));
+        spValoracion.setAdapter(ArrayAdapter.createFromResource(this, R.array.spValoracion, android.R.layout.simple_spinner_dropdown_item));
         spValoracion.setSelection(5);
 
         fabGuardar.setOnClickListener(view -> onClickGuardar());
