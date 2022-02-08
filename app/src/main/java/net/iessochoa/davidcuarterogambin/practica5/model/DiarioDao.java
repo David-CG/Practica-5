@@ -1,11 +1,13 @@
 package net.iessochoa.davidcuarterogambin.practica5.model;
 
 import androidx.lifecycle.LiveData;
+import androidx.room.Dao;
 
 import java.util.List;
 
 import io.reactivex.Single;
 
+@Dao
 public interface DiarioDao {
 
     public static void insert(DiaDiario diaDiario) {

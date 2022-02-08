@@ -51,6 +51,7 @@ public class DiaDiario implements Parcelable {
 
     // ************************* Constructores *************************
 
+    @Ignore
     public DiaDiario(Date fecha, int valoracionDia, String resumen, String contenido, String fotoUri) {
         this.fecha = fecha;
         this.valoracionDia = valoracionDia;
@@ -59,7 +60,6 @@ public class DiaDiario implements Parcelable {
         this.fotoUri = fotoUri;
     }
 
-    @Ignore
     public DiaDiario(Date fecha, int valoracionDia, String resumen, String contenido) {
         this.fecha = fecha;
         this.valoracionDia = valoracionDia;
@@ -90,6 +90,7 @@ public class DiaDiario implements Parcelable {
         this.valoracionDia = valoracionDia;
     }
 
+    @NonNull
     public String getResumen() {
         return resumen;
     }
@@ -98,6 +99,7 @@ public class DiaDiario implements Parcelable {
         this.resumen = resumen;
     }
 
+    @NonNull
     public String getContenido() {
         return contenido;
     }
