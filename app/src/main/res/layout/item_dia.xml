@@ -8,44 +8,53 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardBackgroundColor="@android:color/holo_orange_light"
+        card_view:cardBackgroundColor="@android:color/holo_purple"
         card_view:cardCornerRadius="16dp"
         card_view:cardElevation="4dp"
         card_view:cardUseCompatPadding="true"
         tools:ignore="MissingConstraints">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cardDiaItem"
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="64dp">
 
             <ImageView
                 android:id="@+id/imageView"
-                android:layout_width="32dp"
+                android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_marginStart="16dp"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintStart_toStartOf="parent"
-                card_view:layout_constraintTop_toTopOf="parent" />
+                card_view:layout_constraintTop_toTopOf="parent"
+                card_view:srcCompat="@drawable/neutral" />
 
             <TextView
-                android:id="@+id/textView3"
-                android:layout_width="100dp"
+                android:id="@+id/tvResumenDiaItem"
+                android:layout_width="0dp"
                 android:layout_height="20dp"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                card_view:layout_constraintEnd_toStartOf="@+id/btBorrar"
                 card_view:layout_constraintStart_toEndOf="@+id/imageView"
                 card_view:layout_constraintTop_toTopOf="@+id/imageView" />
 
             <TextView
-                android:id="@+id/textView"
-                android:layout_width="50dp"
-                android:layout_height="20dp"
-                card_view:layout_constraintStart_toStartOf="@+id/textView3"
-                card_view:layout_constraintTop_toBottomOf="@+id/textView3" />
+                android:id="@+id/tvFechaDiaItem"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                card_view:layout_constraintEnd_toEndOf="@+id/tvResumenDiaItem"
+                card_view:layout_constraintStart_toStartOf="@+id/tvResumenDiaItem"
+                card_view:layout_constraintTop_toBottomOf="@+id/tvResumenDiaItem" />
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/btBorrar"
+                android:layout_width="50dp"
+                android:layout_height="0dp"
                 android:layout_marginEnd="16dp"
+                android:backgroundTint="#00FFFFFF"
+                card_view:icon="@android:drawable/ic_menu_delete"
+                card_view:iconGravity="start"
                 card_view:layout_constraintBottom_toBottomOf="parent"
                 card_view:layout_constraintEnd_toEndOf="parent"
                 card_view:layout_constraintTop_toTopOf="parent" />
