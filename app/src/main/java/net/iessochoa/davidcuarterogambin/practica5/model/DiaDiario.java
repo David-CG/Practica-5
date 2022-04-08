@@ -70,24 +70,12 @@ public class DiaDiario implements Parcelable {
 
     // *********************** Getters y setters ***********************
 
-    public static String getTableName() {
-        return TABLE_NAME;
+    public int getId() {
+        return id;
     }
 
-    public static String getID() {
-        return ID;
-    }
-
-    public static String getFECHA() {
-        return FECHA;
-    }
-
-    public static String getValoracionDia() {
-        return VALORACION_DIA;
-    }
-
-    public void setValoracionDia(int valoracionDia) {
-        this.valoracionDia = valoracionDia;
+    public void setId(int id) {
+        this.id = id;
     }
 
     @NonNull
@@ -108,12 +96,22 @@ public class DiaDiario implements Parcelable {
         this.contenido = contenido;
     }
 
-    public static String getRESUMEN() {
-        return RESUMEN;
+    @NonNull
+    public Date getFecha() {
+        return fecha;
     }
 
-    public static String getCONTENIDO() {
-        return CONTENIDO;
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    @NonNull
+    public static String getValoracionDia() {
+        return VALORACION_DIA;
+    }
+
+    public void setValoracionDia(int valoracionDia) {
+        this.valoracionDia = valoracionDia;
     }
 
     public static String getFotoUri() {
@@ -122,22 +120,6 @@ public class DiaDiario implements Parcelable {
 
     public void setFotoUri(String fotoUri) {
         this.fotoUri = fotoUri;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
     }
 
     public int getValoracionResumida() {
@@ -150,10 +132,10 @@ public class DiaDiario implements Parcelable {
         }
     }
 
-    public static int getValoracionResumida(int valoracion) {
-        if (valoracion < 5) {
+    public static int getValoracionResumida(DiaDiario diaDiario) {
+        if (diaDiario.valoracionDia < 5) {
             return 1;
-        } else if (valoracion < 8) {
+        } else if (diaDiario.valoracionDia < 8) {
             return 2;
         } else {
             return 3;

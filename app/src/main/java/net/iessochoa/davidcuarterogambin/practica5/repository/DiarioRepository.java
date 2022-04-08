@@ -15,8 +15,8 @@ import io.reactivex.Single;
 public class DiarioRepository {
     private static volatile DiarioRepository INSTANCE;
 
-    public DiarioDao diarioDao;
-    public LiveData<List<DiaDiario>> allDiarios;
+    private DiarioDao diarioDao;
+    private LiveData<List<DiaDiario>> allDiarios;
 
     public static DiarioRepository getInstance(Application application) {
         if (INSTANCE == null) {
@@ -32,26 +32,35 @@ public class DiarioRepository {
     private DiarioRepository(Application application) {
         DiarioDatabase db = DiarioDatabase.getDatabase(application);
         diarioDao = db.diarioDao();
-        //allDiarios = diarioDao.getAllDiario();
+        allDiarios = diarioDao.getAllDiario();
     }
 
     public LiveData<List<DiaDiario>> getAllDiarios() {
         return allDiarios;
     }
 
-    public Single<Integer> getValoracionDiario() {
+    public LiveData<List<DiaDiario>> getDiarioOrderByResumen(String resumen) {
+        allDiarios = diarioDao.getDiaDiarioOrderBy(resumen);
+        return allDiarios;
+    }
+
+    public Single<Float> getValoracionDiario() {
         return DiarioDao.getValoracionTotal();
     }
 
     public void insert(DiaDiario diaDiario) {
-        DiarioDatabase.databaseWriteExecutor.execute(() -> {
-            DiarioDao.insert(diaDiario);
-        });
+        DiarioDatabase.databaseWriteExecutor.execute(() -> DiarioDao.insert(diaDiario));
     }
 
     public void delete(DiaDiario diaDiario) {
-        DiarioDatabase.databaseWriteExecutor.execute(() -> {
-            DiarioDao.deleteByDiaDiario(diaDiario);
-        });
+        DiarioDatabase.databaseWriteExecutor.execute(() -> DiarioDao.deleteByDiaDiario(diaDiario));
+    }
+
+    public static void update(DiaDiario diaDiario){
+        DiarioDatabase.databaseWriteExecutor.execute(()-> DiarioDao.update(diaDiario));
+    }
+
+    public void deleteAll(){
+        DiarioDatabase.databaseWriteExecutor.execute(() -> DiarioDao.deleteAll());
     }
 }

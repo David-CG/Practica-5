@@ -2,8 +2,11 @@ package net.iessochoa.davidcuarterogambin.practica5.model;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
+import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -13,17 +16,23 @@ import io.reactivex.Single;
 public interface DiarioDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    static void insert(DiaDiario diaDiario) {}
+    void insert(DiaDiario diaDiario);
 
-    static void update(DiaDiario diaDiario) { }
+    @Update
+    void update(DiaDiario diaDiario);
 
-    static void deleteByDiaDiario(DiaDiario diaDiario) { }
+    @Delete
+    void deleteByDiaDiario(DiaDiario diaDiario);
 
-    static void deleteAll() { }
+    @Query("DELETE FROM " + DiaDiario.TABLE_NAME)
+    void deleteAll();
 
-    static LiveData<List<DiaDiario>> getAllDiario(String resumen) { return null; }
+    @Query("SELECT * FROM " + DiaDiario.TABLE_NAME)
+    LiveData<List<DiaDiario>> getAllDiario(String resumen);
 
-    static LiveData<List<DiaDiario>> getDiaDiarioOrderBy(String order) { return null; }
+    @Query("SELECT * FROM diario WHERE resumen LIKE '%' || ':resultado' || '%'")
+    LiveData<List<DiaDiario>> getDiaDiarioOrderBy(String order);
 
-    static Single<Integer> getValoracionTotal() { return null; }
+    @Query("SELECT AVG(valoracion_dia) FROM "+DiaDiario.TABLE_NAME)
+    Single<Integer> getValoracionTotal();
 }
