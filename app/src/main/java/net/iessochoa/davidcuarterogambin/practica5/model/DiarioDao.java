@@ -28,11 +28,11 @@ public interface DiarioDao {
     void deleteAll();
 
     @Query("SELECT * FROM " + DiaDiario.TABLE_NAME)
-    LiveData<List<DiaDiario>> getAllDiario(String resumen);
+    LiveData<List<DiaDiario>> getAllDiario();
 
-    @Query("SELECT * FROM diario WHERE resumen LIKE '%' || ':resultado' || '%'")
-    LiveData<List<DiaDiario>> getDiaDiarioOrderBy(String order);
+    @Query("SELECT * FROM diario WHERE resumen LIKE '%' || :resumen || '%'")
+    LiveData<List<DiaDiario>> getDiaDiarioOrderBy(String resumen);
 
-    @Query("SELECT AVG(valoracion_dia) FROM "+DiaDiario.TABLE_NAME)
-    Single<Integer> getValoracionTotal();
+    @Query("SELECT AVG(valoracion_dia) FROM " + DiaDiario.TABLE_NAME)
+    Single<Float> getValoracionTotal();
 }

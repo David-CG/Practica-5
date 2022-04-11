@@ -106,16 +106,16 @@ public class DiaDiario implements Parcelable {
     }
 
     @NonNull
-    public static String getValoracionDia() {
-        return VALORACION_DIA;
+    public int getValoracionDia() {
+        return valoracionDia;
     }
 
     public void setValoracionDia(int valoracionDia) {
         this.valoracionDia = valoracionDia;
     }
 
-    public static String getFotoUri() {
-        return FOTO_URI;
+    public String getFotoUri() {
+        return fotoUri;
     }
 
     public void setFotoUri(String fotoUri) {

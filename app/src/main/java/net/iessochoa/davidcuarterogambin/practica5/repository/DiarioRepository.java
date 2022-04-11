@@ -45,22 +45,22 @@ public class DiarioRepository {
     }
 
     public Single<Float> getValoracionDiario() {
-        return DiarioDao.getValoracionTotal();
+        return diarioDao.getValoracionTotal();
     }
 
     public void insert(DiaDiario diaDiario) {
-        DiarioDatabase.databaseWriteExecutor.execute(() -> DiarioDao.insert(diaDiario));
+        DiarioDatabase.databaseWriteExecutor.execute(() -> diarioDao.insert(diaDiario));
     }
 
     public void delete(DiaDiario diaDiario) {
-        DiarioDatabase.databaseWriteExecutor.execute(() -> DiarioDao.deleteByDiaDiario(diaDiario));
+        DiarioDatabase.databaseWriteExecutor.execute(() -> diarioDao.deleteByDiaDiario(diaDiario));
     }
 
-    public static void update(DiaDiario diaDiario){
-        DiarioDatabase.databaseWriteExecutor.execute(()-> DiarioDao.update(diaDiario));
+    public void update(DiaDiario diaDiario){
+        DiarioDatabase.databaseWriteExecutor.execute(()-> diarioDao.update(diaDiario));
     }
 
     public void deleteAll(){
-        DiarioDatabase.databaseWriteExecutor.execute(() -> DiarioDao.deleteAll());
+        DiarioDatabase.databaseWriteExecutor.execute(() -> diarioDao.deleteAll());
     }
 }

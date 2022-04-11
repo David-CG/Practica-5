@@ -55,31 +55,31 @@ public abstract class DiarioDatabase extends RoomDatabase {
                             1,
                             "Último mes de clase, agobio y cansancio.",
                             "Mucha carga de trabajo con examenes y prácticas.");
-                    DiarioDao.insert(diaDiario);
+                    diarioDao.insert(diaDiario);
                     // 2 ************************************************************************
                     diaDiario = new DiaDiario(simpleDateFormat.parse("7-2-2022"),
                             3,
                             "Mal día, dolor de cabeza.",
                             "Me tuve que ir de clase y me tomé un paracetamol, después me puse a trabajar en PMDM");
-                    DiarioDao.insert(diaDiario);
+                    diarioDao.insert(diaDiario);
                     // 3 ************************************************************************
                     diaDiario = new DiaDiario(simpleDateFormat.parse("1-1-2022"),
                             10,
                             "Día divertido, reunión con mis amigos.",
                             "Nos juntamos para cenar y ver las campanadas juntos.");
-                    DiarioDao.insert(diaDiario);
+                    diarioDao.insert(diaDiario);
                     // 4 ************************************************************************
                     diaDiario = new DiaDiario(simpleDateFormat.parse("25-12-2021"),
                             6,
                             "Navidad",
                             "Un día normal como todos");
-                    DiarioDao.insert(diaDiario);
+                    diarioDao.insert(diaDiario);
                     // 5 ************************************************************************
                     diaDiario = new DiaDiario(simpleDateFormat.parse("13-9-2021"),
                             8,
                             "Comienzo del curso",
                             "A ver si me aplico y lo puedo sacar.");
-                    DiarioDao.insert(diaDiario);
+                    diarioDao.insert(diaDiario);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
