@@ -36,12 +36,12 @@ public class DiarioAdapter extends RecyclerView.Adapter<DiarioAdapter.DiarioView
 
     @Override
     public void onBindViewHolder(@NonNull DiarioViewHolder holder, int position) {
-        if (listaDiario != null){
+        if (listaDiario != null) {
             final DiaDiario diario = listaDiario.get(position);
             int valor = diario.getValoracionResumida();
             holder.tvResumen.setText(diario.getResumen());
             holder.tvFecha.setText(diario.getFechaFormatoLocal());
-            switch (valor){
+            switch (valor) {
                 case 1:
                     holder.ivImagen.setImageResource(R.drawable.sad);
                     break;
@@ -52,7 +52,7 @@ public class DiarioAdapter extends RecyclerView.Adapter<DiarioAdapter.DiarioView
                     holder.ivImagen.setImageResource(R.drawable.smile);
                     break;
             }
-        }else {
+        } else {
             holder.tvResumen.setText("Vacío");
             holder.tvFecha.setText("Vacío");
             holder.ivImagen.setImageResource(R.drawable.neutral);
@@ -62,7 +62,7 @@ public class DiarioAdapter extends RecyclerView.Adapter<DiarioAdapter.DiarioView
     @Override
     public int getItemCount() {
         if (listaDiario != null) {
-            return  listaDiario.size();
+            return listaDiario.size();
         } else {
             return 0;
         }
