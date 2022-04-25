@@ -1,8 +1,10 @@
 package net.iessochoa.davidcuarterogambin.practica5.ui;
 
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -56,11 +58,31 @@ public class MainActivity extends AppCompatActivity {
         diarioAdapter = new DiarioAdapter();
         rvLista.setLayoutManager(new LinearLayoutManager(this));
         rvLista.setAdapter(diarioAdapter);
+
         diarioViewModel = new ViewModelProvider(this).get(DiarioViewModel.class);
         diarioViewModel.getAllDiarios().observe(this, new Observer<List<DiaDiario>>() {
             @Override
             public void onChanged(List<DiaDiario> diario) {
                 diarioAdapter.setListaTareas(diario);
+            }
+        });
+
+        // Controles RecyclerView
+
+        // Para editar hay que pulsar en el cardView y lanza una activity para obtener resultado
+        diarioAdapter.setOnClickItemListener(new DiarioAdapter.OnItemClickItemListener() {
+            @Override
+            public void onItemClickItem(DiaDiario diaDiario) {
+                Intent intent = new Intent(MainActivity.this, EdicionDiaActivity.class);
+                intent.putExtra(EdicionDiaActivity.EXTRA_DIA, diaDiario);
+                startActivityForResult(intent, REQUEST_EDITA_DIA);
+            }
+        });
+
+        diarioAdapter.setOnClickBorrarListener(new DiarioAdapter.OnItemClickBorrarListener() {
+            @Override
+            public void onItemClickBorrar(DiaDiario diaDiario) {
+                eliminarDia(diaDiario);
             }
         });
 
@@ -75,11 +97,52 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
+    // Menu
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    // Acciones
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        switch (requestCode) {
+            case REQUEST_NUEVO_DIA:
+                if (resultCode != RESULT_CANCELED) {
+                    DiaDiario diaDiario = intent.getParcelableExtra(EdicionDiaActivity.EXTRA_DIA);
+                    diarioViewModel.insert(diaDiario);
+                }
+                break;
+
+            case REQUEST_EDITA_DIA:
+                if (resultCode != RESULT_CANCELED) {
+                    diarioViewModel.update(intent.getParcelableExtra(EdicionDiaActivity.EXTRA_DIA));
+                }
+                break;
+        }
+    }
+
+    private void eliminarDia(DiaDiario diaDiario) {
+        AlertDialog.Builder dialogoEliminar = new AlertDialog.Builder(MainActivity.this);
+        dialogoEliminar.setTitle("Aviso");
+        dialogoEliminar.setMessage("¿Está seguro que desea eliminar esta tarea?");
+
+        dialogoEliminar.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                diarioViewModel.delete(diaDiario);
+            }
+        });
+        dialogoEliminar.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+            }
+        });
+        dialogoEliminar.show();
     }
 
     private void iniciaViews() {
@@ -88,6 +151,4 @@ public class MainActivity extends AppCompatActivity {
         rvLista = findViewById(R.id.rvLista);
         svBusqueda = findViewById(R.id.svBusqueda);
     }
-
-    // onActivityResult editar y nuevo
 }

@@ -40,7 +40,7 @@ public class DiarioAdapter extends RecyclerView.Adapter<DiarioAdapter.DiarioView
             final DiaDiario diario = listaDiario.get(position);
             int valor = diario.getValoracionResumida();
             holder.tvResumen.setText(diario.getResumen());
-            holder.tvFecha.setText(diario.getFechaFormatoLocal());
+            //holder.tvFecha.setText(diario.getFechaFormatoLocal());
             switch (valor) {
                 case 1:
                     holder.ivImagen.setImageResource(R.drawable.sad);

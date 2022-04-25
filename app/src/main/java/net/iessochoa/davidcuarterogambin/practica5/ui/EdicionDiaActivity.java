@@ -26,6 +26,7 @@ import net.iessochoa.davidcuarterogambin.practica5.model.DiaDiario;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -38,6 +39,8 @@ public class EdicionDiaActivity extends AppCompatActivity {
     EditText etResumen, etContenido;
     Spinner spValoracion;
     FloatingActionButton fabGuardar;
+
+    DiaDiario diaDiario = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +57,30 @@ public class EdicionDiaActivity extends AppCompatActivity {
             }
         });
 
+        // Spinner
+
+        /*
+        tvFecha
+        ivFecha
+        etResumen
+        etContenido
+        spValoracion
+        fabGuardar
+        *
+        */
+
         spValoracion.setAdapter(ArrayAdapter.createFromResource(this, R.array.spValoracion, android.R.layout.simple_spinner_dropdown_item));
         spValoracion.setSelection(5);
+
+        //Comprueba si el día recibido no esta vacío
+        diaDiario = getIntent().getParcelableExtra(EXTRA_DIA);
+        if (diaDiario != null) {
+
+            tvFecha.setText(diaDiario.getFechaFormatoLocal());
+            etResumen.setText(diaDiario.getResumen());
+            etContenido.setText(diaDiario.getContenido());
+            spValoracion.setSelection(Arrays.asList(getResources().getStringArray(R.array.spValoracion)).indexOf(diaDiario.getValoracionDia()));
+        }
 
         fabGuardar.setOnClickListener(view -> onClickGuardar());
     }
@@ -64,7 +89,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
 
         Calendar newCalendar = Calendar.getInstance();
 
-        DatePickerDialog dialogo = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog dialogoFecha = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
             @SuppressLint("SimpleDateFormat")
             @Override
             public void onDateSet(DatePicker view, int anyo, int mes, int dia) {
@@ -78,7 +103,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
                 newCalendar.get(Calendar.MONTH),
                 newCalendar.get(Calendar.DAY_OF_MONTH));
 
-        dialogo.show();
+        dialogoFecha.show();
     }
 
     public View.OnClickListener onClickGuardar() {
@@ -110,7 +135,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
         AlertDialog.Builder dialogoCampos = new AlertDialog.Builder(this);
         dialogoCampos.setTitle(R.string.titulo_campos_incompletos);
         dialogoCampos.setMessage(R.string.cont_campos_incompletos);
-        dialogoCampos.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+        dialogoCampos.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
             }
