@@ -58,17 +58,6 @@ public class EdicionDiaActivity extends AppCompatActivity {
         });
 
         // Spinner
-
-        /*
-        tvFecha
-        ivFecha
-        etResumen
-        etContenido
-        spValoracion
-        fabGuardar
-        *
-        */
-
         spValoracion.setAdapter(ArrayAdapter.createFromResource(this, R.array.spValoracion, android.R.layout.simple_spinner_dropdown_item));
         spValoracion.setSelection(5);
 
@@ -114,7 +103,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
                 etResumen.setText(etResumen.getText().toString().trim());
                 etContenido.setText(etContenido.getText().toString().trim());
                 if ((etResumen.getText().toString().equals("")) || (etContenido.getText().toString().equals(""))) {
-                    compruebaCampos();
+                    camposIncompletos();
                 } else {
                     Intent resultado = new Intent();
                     Date fecha = null;
@@ -131,7 +120,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
         };
     }
 
-    private void compruebaCampos() {
+    private void camposIncompletos() {
         AlertDialog.Builder dialogoCampos = new AlertDialog.Builder(this);
         dialogoCampos.setTitle(R.string.titulo_campos_incompletos);
         dialogoCampos.setMessage(R.string.cont_campos_incompletos);
@@ -143,6 +132,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
         dialogoCampos.show();
     }
 
+    // Inicia los componentes de la activity
     private void iniciaViews() {
         tvFecha = findViewById(R.id.tvFecha);
         ivFecha = findViewById(R.id.ivFecha);
