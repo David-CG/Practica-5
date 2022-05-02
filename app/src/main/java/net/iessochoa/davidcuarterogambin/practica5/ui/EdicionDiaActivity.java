@@ -39,6 +39,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
     EditText etResumen, etContenido;
     Spinner spValoracion;
     FloatingActionButton fabGuardar;
+    Date fecha;
 
     DiaDiario diaDiario = null;
 
@@ -71,7 +72,53 @@ public class EdicionDiaActivity extends AppCompatActivity {
             spValoracion.setSelection(Arrays.asList(getResources().getStringArray(R.array.spValoracion)).indexOf(diaDiario.getValoracionDia()));
         }
 
-        fabGuardar.setOnClickListener(view -> onClickGuardar());
+        // Comprueba que no haya campos vacíos y guarda los datos introducidos para enviarlos al main
+        fabGuardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                etResumen.setText(etResumen.getText().toString().trim());
+                etContenido.setText(etContenido.getText().toString().trim());
+                if ((etResumen.getText().toString().isEmpty()) || (etContenido.getText().toString().isEmpty()) || tvFecha == null) {
+                    camposIncompletos();
+                } else {
+                    if (diaDiario != null) {
+                        diaDiario.setFecha(fecha);
+                        diaDiario.setValoracionDia(Integer.parseInt(spValoracion.getSelectedItem().toString()));
+                        diaDiario.setContenido(etContenido.getText().toString());
+                        diaDiario.setResumen(etResumen.getText().toString());
+                        Intent intent = getIntent();
+                        intent.putExtra(EXTRA_DIA, diaDiario);
+                    } else {
+                        diaDiario = new DiaDiario(fecha, Integer.parseInt(spValoracion.getSelectedItem().toString()), etResumen.getText().toString(), etContenido.getText().toString());
+                        Intent intent = getIntent();
+                        intent.putExtra(EXTRA_DIA, diaDiario);
+                        setResult(RESULT_OK, intent);
+                    }
+                    finish();
+
+
+
+
+
+
+
+
+                    /*Date fecha = null;
+                    try {
+                        fecha = new SimpleDateFormat("dd/MM/yyyy").parse(tvFecha.getText().toString());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    DiaDiario diaDiario = new DiaDiario(fecha, Integer.parseInt((String) spValoracion.getSelectedItem()), etResumen.getText().toString(), etContenido.getText().toString());
+
+                    Intent intent = new Intent();
+                    intent.putExtra(EXTRA_DIA, diaDiario);
+                    setResult(RESULT_OK, intent);
+                    finish();*/
+                }
+            }
+        });
     }
 
     public void onClickFecha() {
@@ -84,40 +131,13 @@ public class EdicionDiaActivity extends AppCompatActivity {
             public void onDateSet(DatePicker view, int anyo, int mes, int dia) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(anyo, mes, dia);
-
+                fecha = calendar.getTime();
                 EdicionDiaActivity.this.tvFecha.setText(new SimpleDateFormat("dd/MM/yyyy").format(calendar.getTime()));
             }
 
-        }, newCalendar.get(Calendar.YEAR),
-                newCalendar.get(Calendar.MONTH),
-                newCalendar.get(Calendar.DAY_OF_MONTH));
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
         dialogoFecha.show();
-    }
-
-    public View.OnClickListener onClickGuardar() {
-        return new View.OnClickListener() {
-            @SuppressLint("SimpleDateFormat")
-            @Override
-            public void onClick(View view) {
-                etResumen.setText(etResumen.getText().toString().trim());
-                etContenido.setText(etContenido.getText().toString().trim());
-                if ((etResumen.getText().toString().equals("")) || (etContenido.getText().toString().equals(""))) {
-                    camposIncompletos();
-                } else {
-                    Intent resultado = new Intent();
-                    Date fecha = null;
-                    try {
-                        fecha = new SimpleDateFormat("dd/MM/yyyy").parse(tvFecha.getText().toString());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    resultado.putExtra(EXTRA_DIA, new DiaDiario(fecha, Integer.parseInt((String) spValoracion.getSelectedItem()), etResumen.getText().toString(), etContenido.getText().toString()));
-                    setResult(RESULT_OK, resultado);
-                    finish();
-                }
-            }
-        };
     }
 
     private void camposIncompletos() {

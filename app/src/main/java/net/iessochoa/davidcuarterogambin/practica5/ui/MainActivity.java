@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private final static int REQUEST_NUEVO_DIA = 0;
     private final static int REQUEST_EDITA_DIA = 1;
 
+    DiaDiario diaDiario;
     DiarioViewModel diarioViewModel;
     DiarioAdapter diarioAdapter;
 
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Controles RecyclerView
+        // ****************************** Controles RecyclerView ***********************************
 
         // Para editar hay que pulsar en el cardView y lanza una activity para obtener resultado
         diarioAdapter.setOnClickItemListener(new DiarioAdapter.OnItemClickItemListener() {
@@ -78,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_EDITA_DIA);
             }
         });
+
 
         diarioAdapter.setOnClickBorrarListener(new DiarioAdapter.OnItemClickBorrarListener() {
             @Override
@@ -113,14 +115,15 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case REQUEST_NUEVO_DIA:
                 if (resultCode != RESULT_CANCELED) {
-                    DiaDiario diaDiario = intent.getParcelableExtra(EdicionDiaActivity.EXTRA_DIA);
+                    diaDiario = intent.getParcelableExtra(EdicionDiaActivity.EXTRA_DIA);
                     diarioViewModel.insert(diaDiario);
                 }
                 break;
 
             case REQUEST_EDITA_DIA:
                 if (resultCode != RESULT_CANCELED) {
-                    diarioViewModel.update(intent.getParcelableExtra(EdicionDiaActivity.EXTRA_DIA));
+                    diaDiario = intent.getParcelableExtra(EdicionDiaActivity.EXTRA_DIA);
+                    diarioViewModel.update(diaDiario);
                 }
                 break;
         }
