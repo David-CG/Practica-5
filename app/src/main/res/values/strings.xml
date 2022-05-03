@@ -7,4 +7,9 @@
     <string name="radio_button_descendente">Desc</string>
     <string name="titulo_campos_incompletos">Campos incompletos</string>
     <string name="cont_campos_incompletos">Completa todos los campos para guardar la valoración.</string>
+    <string name="ordenar">Ordenar</string>
+    <string name="valora_vida">Valora vida</string>
+    <string name="mostrar_entre_fechas">Mostrar entre fechas</string>
+    <string name="configuracion">Configuración</string>
+    <string name="acerca_de">Acerca de...</string>
 </resources>

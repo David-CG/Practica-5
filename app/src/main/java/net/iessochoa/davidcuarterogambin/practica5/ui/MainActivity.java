@@ -88,15 +88,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Nuevo diario
+        // ************************************* Nuevo diario **************************************
 
         fabNuevo.setOnClickListener(view -> {
             Intent i = new Intent(this, EdicionDiaActivity.class);
             startActivityForResult(i, REQUEST_NUEVO_DIA);
         });
 
-        // Toolbar
+        // *************************************** Toolbar *****************************************
         setSupportActionBar(toolbar);
+
+        // ************************************** Búsqueda *****************************************
+
+        svBusqueda.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                diarioViewModel.setBusqueda(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.length() == 0) {
+                    diarioViewModel.setBusqueda("");
+                }
+                return false;
+            }
+        });
     }
 
     // Menu

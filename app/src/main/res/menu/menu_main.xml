@@ -4,18 +4,18 @@
     <item
         android:id="@+id/action_ordenar"
         android:icon="@android:drawable/ic_menu_sort_alphabetically"
-        android:title="Ordenar"
+        android:title="@string/ordenar"
         app:showAsAction="always" />
     <item
         android:id="@+id/action_valoravida"
-        android:title="Valora vida" />
+        android:title="@string/valora_vida" />
     <item
         android:id="@+id/action_fechas"
-        android:title="Mostrar entre fechas" />
+        android:title="@string/mostrar_entre_fechas" />
     <item
-        android:id="@+id/action_settings"
-        android:title="Configuración" />
+        android:id="@+id/action_config"
+        android:title="@string/configuraci_n" />
     <item
-        android:id="@+id/action_about"
-        android:title="Acerca de..." />
+        android:id="@+id/action_acercade"
+        android:title="@string/acerca_de" />
 </menu>

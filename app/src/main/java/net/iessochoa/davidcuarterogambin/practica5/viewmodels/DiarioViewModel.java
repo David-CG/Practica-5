@@ -3,6 +3,7 @@ package net.iessochoa.davidcuarterogambin.practica5.viewmodels;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.arch.core.util.Function;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -15,9 +16,9 @@ import java.util.List;
 
 public class DiarioViewModel extends AndroidViewModel {
 
-    private DiarioRepository repository;
-    private MutableLiveData<String> busqueda;
-    private LiveData<List<DiaDiario>> allDiarios;
+    private final DiarioRepository repository;
+    private final MutableLiveData<String> busqueda;
+    LiveData<List<DiaDiario>> allDiarios;
 
     public DiarioViewModel(@NonNull Application application) {
         super(application);
@@ -27,7 +28,7 @@ public class DiarioViewModel extends AndroidViewModel {
         busqueda = new MutableLiveData<>();
         busqueda.setValue("");
 
-        //allDiarios = Transformations.switchMap(busqueda, repository::getAllDiarios);
+        allDiarios = Transformations.switchMap(busqueda, resumen -> repository.getDiarioOrderByResumen(resumen));
     }
 
     public LiveData<List<DiaDiario>> getAllDiarios() {
