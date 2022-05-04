@@ -4,21 +4,26 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,6 +34,11 @@ import net.iessochoa.davidcuarterogambin.practica5.model.DiaDiario;
 import net.iessochoa.davidcuarterogambin.practica5.viewmodels.DiarioViewModel;
 
 import java.util.List;
+
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -117,7 +127,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // Menu
+    // ********************* Menu *************************
+    // Añade el menú y los botones del menu con sus respectivas acciones
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -126,7 +137,99 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    // Acciones
+    @SuppressLint("NonConstantResourceId")
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_ordenar:
+                dialogoOrdenar();
+                return true;
+            case R.id.action_valoravida:
+                dialogoValorVida();
+                return true;
+            case R.id.action_fechas:
+                return true;
+            case R.id.action_config:
+                return true;
+            case R.id.action_acercade:
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                DialogoAcercaDe dialogo = new DialogoAcercaDe();
+                dialogo.show(fragmentManager, getString(R.string.about_title));
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // Método que crea el diálogo de ordenar
+    public void dialogoOrdenar() {
+        Context context = getApplicationContext();
+        final CharSequence[] items = {"Fecha", "Valoración", "Resumen"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+        builder.setTitle(R.string.ordena_titulo);
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int item) {
+                Toast.makeText(context, getString(R.string.ordena_contenido) + items[item], Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+
+            }
+        }).show();
+    }
+
+    // Clase que crea el diálogo Acerca de
+    public static class DialogoAcercaDe extends DialogFragment {
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder.setMessage(R.string.about_content)
+                    .setTitle(getString(R.string.about_title))
+                    .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
+
+    private void dialogoValorVida() {
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
+        LayoutInflater layoutInflater = MainActivity.this.getLayoutInflater();
+        View valoraVida = layoutInflater.inflate(R.layout.valora_vida, null);
+        ImageView ivValoraVida = valoraVida.findViewById(R.id.ivValoraVida);
+
+        diarioViewModel.getValoracionTotal().subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new SingleObserver<Float>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onSuccess(Float aFloat) {
+                if (aFloat < 5) {
+                    ivValoraVida.setImageResource(R.drawable.sad);
+                } else if (aFloat >= 5 && aFloat < 8) {
+                    ivValoraVida.setImageResource(R.drawable.neutral);
+                } else {
+                    ivValoraVida.setImageResource(R.drawable.smile);
+                }
+                alertDialog.setPositiveButton(R.string.ok_button, null);
+                alertDialog.setView(valoraVida);
+                alertDialog.show();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+        });
+    }
+
+    // ******************* Acciones ***********************
 
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);

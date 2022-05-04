@@ -11,5 +11,15 @@
     <string name="valora_vida">Valora vida</string>
     <string name="mostrar_entre_fechas">Mostrar entre fechas</string>
     <string name="configuracion">Configuración</string>
-    <string name="acerca_de">Acerca de...</string>
+    <string name="acerca_de">Acerca de…</string>
+    <string name="about_title">Acerca de</string>
+    <string name="about_content">
+        Práctica 4\n
+        V1.0\n
+        David Cuartero Gambín\n
+        Licencia cc\n
+        (Creative Commons)</string>
+    <string name="ok_button">OK</string>
+    <string name="ordena_titulo">Ordenar por</string>
+    <string name="ordena_contenido">Ordenado por&#160;</string> <!-- Valor unicode del espacio -->
 </resources>

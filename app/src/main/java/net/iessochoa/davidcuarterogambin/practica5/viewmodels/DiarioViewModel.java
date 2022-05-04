@@ -14,6 +14,8 @@ import net.iessochoa.davidcuarterogambin.practica5.repository.DiarioRepository;
 
 import java.util.List;
 
+import io.reactivex.Single;
+
 public class DiarioViewModel extends AndroidViewModel {
 
     private final DiarioRepository repository;
@@ -47,9 +49,9 @@ public class DiarioViewModel extends AndroidViewModel {
         repository.update(diaDiario);
     }
 
-    /*public Single<Float> getValoracionTotal() {
+    public Single<Float> getValoracionTotal() {
         return repository.getValoracionDiario();
-    }*/
+    }
 
     public void setBusqueda(String resultado) {
         busqueda.setValue(resultado);

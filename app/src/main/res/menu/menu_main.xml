@@ -14,7 +14,7 @@
         android:title="@string/mostrar_entre_fechas" />
     <item
         android:id="@+id/action_config"
-        android:title="@string/configuraci_n" />
+        android:title="@string/configuracion" />
     <item
         android:id="@+id/action_acercade"
         android:title="@string/acerca_de" />
