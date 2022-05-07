@@ -9,6 +9,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -125,6 +127,14 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        // ******************************** Orientación pantalla ***********************************
+        // Si la pantalla está en horizontal
+        int orientacion = getResources().getConfiguration().orientation;
+        if (orientacion == Configuration.ORIENTATION_PORTRAIT)
+            rvLista.setLayoutManager(new LinearLayoutManager(this));
+        else
+            rvLista.setLayoutManager(new GridLayoutManager(this, 2));
     }
 
     // ********************* Menu *************************

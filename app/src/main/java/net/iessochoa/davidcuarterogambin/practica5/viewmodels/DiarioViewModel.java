@@ -3,7 +3,6 @@ package net.iessochoa.davidcuarterogambin.practica5.viewmodels;
 import android.app.Application;
 
 import androidx.annotation.NonNull;
-import androidx.arch.core.util.Function;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -30,7 +29,7 @@ public class DiarioViewModel extends AndroidViewModel {
         busqueda = new MutableLiveData<>();
         busqueda.setValue("");
 
-        allDiarios = Transformations.switchMap(busqueda, resumen -> repository.getDiarioOrderByResumen(resumen));
+        allDiarios = Transformations.switchMap(busqueda, repository::getDiarioOrderByResumen);
     }
 
     public LiveData<List<DiaDiario>> getAllDiarios() {
