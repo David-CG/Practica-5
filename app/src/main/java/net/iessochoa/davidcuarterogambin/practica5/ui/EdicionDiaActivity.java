@@ -1,30 +1,28 @@
 package net.iessochoa.davidcuarterogambin.practica5.ui;
 
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import net.iessochoa.davidcuarterogambin.practica5.R;
 import net.iessochoa.davidcuarterogambin.practica5.model.DiaDiario;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -51,12 +49,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
         // Inicia las views de la activity
         iniciaViews();
 
-        ivFecha.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onClickFecha();
-            }
-        });
+        ivFecha.setOnClickListener(view -> onClickFecha());
 
         // Spinner
         spValoracion.setAdapter(ArrayAdapter.createFromResource(this, R.array.spValoracion, android.R.layout.simple_spinner_dropdown_item));
@@ -74,66 +67,72 @@ public class EdicionDiaActivity extends AppCompatActivity {
         }
 
         // Comprueba que no haya campos vacíos y guarda los datos introducidos para enviarlos al main
-        fabGuardar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                etResumen.setText(etResumen.getText().toString().trim());
-                etContenido.setText(etContenido.getText().toString().trim());
-                if ((tvFecha == null || etResumen.getText().toString().isEmpty()) || (etContenido.getText().toString().isEmpty())) {
-                    camposIncompletos();
+        fabGuardar.setOnClickListener(view -> {
+            etResumen.setText(etResumen.getText().toString().trim());
+            etContenido.setText(etContenido.getText().toString().trim());
+            if ((tvFecha == null || etResumen.getText().toString().isEmpty()) || (etContenido.getText().toString().isEmpty())) {
+                camposIncompletos();
+            } else {
+                if (diaDiario != null) {
+                    diaDiario.setFecha(fecha);
+                    diaDiario.setValoracionDia(Integer.parseInt(spValoracion.getSelectedItem().toString()));
+                    diaDiario.setContenido(etContenido.getText().toString());
+                    diaDiario.setResumen(etResumen.getText().toString());
+                    Intent intent = getIntent();
+                    intent.putExtra(EXTRA_DIA, diaDiario);
+                    setResult(RESULT_OK, intent);
                 } else {
-                    if (diaDiario != null) {
-                        diaDiario.setFecha(fecha);
-                        diaDiario.setValoracionDia(Integer.parseInt(spValoracion.getSelectedItem().toString()));
-                        diaDiario.setContenido(etContenido.getText().toString());
-                        diaDiario.setResumen(etResumen.getText().toString());
-                        Intent intent = getIntent();
-                        intent.putExtra(EXTRA_DIA, diaDiario);
-                        setResult(RESULT_OK, intent);
-                    } else {
-                        diaDiario = new DiaDiario(fecha, Integer.parseInt(spValoracion.getSelectedItem().toString()), etResumen.getText().toString(), etContenido.getText().toString());
-                        Intent intent = getIntent();
-                        intent.putExtra(EXTRA_DIA, diaDiario);
-                        setResult(RESULT_OK, intent);
-                    }
-                    finish();
+                    diaDiario = new DiaDiario(fecha, Integer.parseInt(spValoracion.getSelectedItem().toString()), etResumen.getText().toString(), etContenido.getText().toString());
+                    Intent intent = getIntent();
+                    intent.putExtra(EXTRA_DIA, diaDiario);
+                    setResult(RESULT_OK, intent);
                 }
+                finish();
             }
         });
     }
 
+    // Crea el diálogo de calendario para escoger la fecha deseada.
     public void onClickFecha() {
 
         Calendar newCalendar = Calendar.getInstance();
 
-        DatePickerDialog dialogoFecha = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @SuppressLint("SimpleDateFormat")
-            @Override
-            public void onDateSet(DatePicker view, int anyo, int mes, int dia) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(anyo, mes, dia);
-                fecha = calendar.getTime();
-                EdicionDiaActivity.this.tvFecha.setText(new SimpleDateFormat("dd/MM/yyyy").format(calendar.getTime()));
-            }
-
+        @SuppressLint("SimpleDateFormat") DatePickerDialog dialogoFecha = new DatePickerDialog(this, (view, anyo, mes, dia) -> {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(anyo, mes, dia);
+            fecha = calendar.getTime();
+            EdicionDiaActivity.this.tvFecha.setText(new SimpleDateFormat("dd/MM/yyyy").format(calendar.getTime()));
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
 
         dialogoFecha.show();
     }
 
+    // Diálogo que se muestra cuando uno o más campos están incompletos.
     private void camposIncompletos() {
         AlertDialog.Builder dialogoCampos = new AlertDialog.Builder(this);
         dialogoCampos.setTitle(R.string.titulo_campos_incompletos);
         dialogoCampos.setMessage(R.string.cont_campos_incompletos);
-        dialogoCampos.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
+        dialogoCampos.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> {
         });
         dialogoCampos.show();
     }
 
-    // Inicia los componentes de la activity
+    private void guardarDiaPreferencias(Date fecha) {
+        //buscamos el fichero de preferencias
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
+
+        //lo abrimos en modo edición
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        //guardamos la fecha del día como entero
+        editor.putLong(getString(R.string.pref_key_ultimo_dia), fecha.getTime());
+
+        //finalizamos
+        editor.apply();
+    }
+
+
+    // Inicia los componentes de la activity.
     private void iniciaViews() {
         tvFecha = findViewById(R.id.tvFecha);
         ivFecha = findViewById(R.id.ivFecha);

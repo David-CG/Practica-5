@@ -1,5 +1,6 @@
 package net.iessochoa.davidcuarterogambin.practica5.model;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
@@ -39,15 +40,15 @@ public abstract class DiarioDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
+    private static final RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
 
             databaseWriteExecutor.execute(() -> {
                 DiarioDao diarioDao = INSTANCE.diarioDao();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-                DiaDiario diaDiario = null;
+                @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                DiaDiario diaDiario;
 
                 try {
                     // 1 ************************************************************************

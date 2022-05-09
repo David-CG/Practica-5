@@ -13,6 +13,10 @@
         android:id="@+id/action_fechas"
         android:title="@string/mostrar_entre_fechas" />
     <item
+        android:id="@+id/action_ultimodia"
+        android:icon="@android:drawable/ic_menu_sort_alphabetically"
+        android:title="@string/ultimo_dia" />
+    <item
         android:id="@+id/action_config"
         android:title="@string/configuracion" />
     <item

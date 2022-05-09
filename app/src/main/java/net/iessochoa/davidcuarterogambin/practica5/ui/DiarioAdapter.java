@@ -1,9 +1,9 @@
 package net.iessochoa.davidcuarterogambin.practica5.ui;
 
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,6 +22,7 @@ public class DiarioAdapter extends RecyclerView.Adapter<DiarioAdapter.DiarioView
     private OnItemClickBorrarListener listenerBorrar;
     private OnItemClickItemListener listenerItem;
 
+    @SuppressLint("NotifyDataSetChanged")
     public void setListaTareas(List<DiaDiario> diaDiarios) {
         listaDiario = diaDiarios;
         notifyDataSetChanged();
@@ -83,12 +84,9 @@ public class DiarioAdapter extends RecyclerView.Adapter<DiarioAdapter.DiarioView
                     listenerBorrar.onItemClickBorrar(listaDiario.get(DiarioViewHolder.this.getAbsoluteAdapterPosition()));
                 }
             });
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (listenerItem != null)
-                        listenerItem.onItemClickItem(listaDiario.get(DiarioViewHolder.this.getAbsoluteAdapterPosition()));
-                }
+            itemView.setOnClickListener(view -> {
+                if (listenerItem != null)
+                    listenerItem.onItemClickItem(listaDiario.get(DiarioViewHolder.this.getAbsoluteAdapterPosition()));
             });
         }
 

@@ -29,7 +29,6 @@ public class DiaDiario implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = ID)
-    @NonNull
     private int id;
 
     @ColumnInfo(name = FECHA)
@@ -105,7 +104,6 @@ public class DiaDiario implements Parcelable {
         this.fecha = fecha;
     }
 
-    @NonNull
     public int getValoracionDia() {
         return valoracionDia;
     }

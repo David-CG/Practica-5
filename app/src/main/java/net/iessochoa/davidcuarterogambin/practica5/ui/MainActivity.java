@@ -1,15 +1,10 @@
 package net.iessochoa.davidcuarterogambin.practica5.ui;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,12 +15,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
-import androidx.constraintlayout.motion.widget.OnSwipe;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -38,7 +35,7 @@ import net.iessochoa.davidcuarterogambin.practica5.R;
 import net.iessochoa.davidcuarterogambin.practica5.model.DiaDiario;
 import net.iessochoa.davidcuarterogambin.practica5.viewmodels.DiarioViewModel;
 
-import java.util.List;
+import java.util.Date;
 
 import io.reactivex.SingleObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -76,32 +73,19 @@ public class MainActivity extends AppCompatActivity {
         rvLista.setAdapter(diarioAdapter);
 
         diarioViewModel = new ViewModelProvider(this).get(DiarioViewModel.class);
-        diarioViewModel.getAllDiarios().observe(this, new Observer<List<DiaDiario>>() {
-            @Override
-            public void onChanged(List<DiaDiario> diario) {
-                diarioAdapter.setListaTareas(diario);
-            }
-        });
+        diarioViewModel.getAllDiarios().observe(this, diario -> diarioAdapter.setListaTareas(diario));
 
         // ****************************** Controles RecyclerView ***********************************
 
         // Para editar hay que pulsar en el cardView y lanza una activity para obtener resultado
-        diarioAdapter.setOnClickItemListener(new DiarioAdapter.OnItemClickItemListener() {
-            @Override
-            public void onItemClickItem(DiaDiario diaDiario) {
-                Intent intent = new Intent(MainActivity.this, EdicionDiaActivity.class);
-                intent.putExtra(EdicionDiaActivity.EXTRA_DIA, diaDiario);
-                startActivityForResult(intent, REQUEST_EDITA_DIA);
-            }
+        diarioAdapter.setOnClickItemListener(diaDiario -> {
+            Intent intent = new Intent(MainActivity.this, EdicionDiaActivity.class);
+            intent.putExtra(EdicionDiaActivity.EXTRA_DIA, diaDiario);
+            startActivityForResult(intent, REQUEST_EDITA_DIA);
         });
 
 
-        diarioAdapter.setOnClickBorrarListener(new DiarioAdapter.OnItemClickBorrarListener() {
-            @Override
-            public void onItemClickBorrar(DiaDiario diaDiario) {
-                eliminarDia(diaDiario);
-            }
-        });
+        diarioAdapter.setOnClickBorrarListener(this::eliminarDia);
 
         // ************************************* Nuevo diario **************************************
 
@@ -150,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                diaDiario = ((DiarioAdapter.DiarioViewHolder)viewHolder).getDia();
+                diaDiario = ((DiarioAdapter.DiarioViewHolder) viewHolder).getDia();
                 eliminarDia(diaDiario);
             }
         };
@@ -175,18 +159,29 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_ordenar:
                 dialogoOrdenar();
                 return true;
+
             case R.id.action_valoravida:
                 dialogoValorVida();
                 return true;
+
             case R.id.action_fechas:
                 return true;
-            case R.id.action_config:
+
+            case R.id.action_ultimodia:
+                muestraUltimoDia();
                 return true;
+
+            case R.id.action_config:
+                Intent intent = new Intent(this, PreferenciasActivity.class);
+                startActivity(intent);
+                return true;
+
             case R.id.action_acercade:
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 DialogoAcercaDe dialogo = new DialogoAcercaDe();
                 dialogo.show(fragmentManager, getString(R.string.about_title));
                 return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -199,17 +194,16 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
         builder.setTitle(R.string.ordena_titulo);
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int item) {
-                Toast.makeText(context, getString(R.string.ordena_contenido) + items[item], Toast.LENGTH_SHORT).show();
-                dialog.dismiss();
+        builder.setItems(items, (dialog, item) -> {
+            Toast.makeText(context, getString(R.string.ordena_contenido) + items[item], Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
 
-            }
         }).show();
     }
 
     // Clase que crea el diálogo Acerca de
     public static class DialogoAcercaDe extends DialogFragment {
+        @NonNull
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -217,11 +211,7 @@ public class MainActivity extends AppCompatActivity {
 
             builder.setMessage(R.string.about_content)
                     .setTitle(getString(R.string.about_title))
-                    .setPositiveButton(R.string.ok_button, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
+                    .setPositiveButton(R.string.ok_button, (dialog, id) -> dialog.cancel());
 
             return builder.create();
         }
@@ -261,8 +251,22 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+    private void muestraUltimoDia() {
+
+        //recuperamos las preferencias
+        SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
+
+        //recuperamos la fecha del últimos día editado
+        long ultimoDia = sharedPref.getLong(getString(R.string.pref_key_ultimo_dia), 0);
+
+        //mostramos el resultado
+        Toast.makeText(this, "El último día editado " + DiaDiario.getFechaFormatoLocal(new Date(ultimoDia)), Toast.LENGTH_LONG).show();
+    }
+
     // ******************* Acciones ***********************
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         switch (requestCode) {
@@ -287,16 +291,8 @@ public class MainActivity extends AppCompatActivity {
         dialogoEliminar.setTitle("Aviso");
         dialogoEliminar.setMessage("¿Está seguro que desea eliminar esta tarea?");
 
-        dialogoEliminar.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                diarioViewModel.delete(diaDiario);
-            }
-        });
-        dialogoEliminar.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-            }
+        dialogoEliminar.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> diarioViewModel.delete(diaDiario));
+        dialogoEliminar.setNegativeButton(android.R.string.no, (dialogInterface, i) -> {
         });
         dialogoEliminar.show();
     }

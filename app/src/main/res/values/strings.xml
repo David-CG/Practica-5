@@ -12,6 +12,7 @@
     <string name="mostrar_entre_fechas">Mostrar entre fechas</string>
     <string name="configuracion">Configuración</string>
     <string name="acerca_de">Acerca de…</string>
+    <string name="ultimo_dia">Último día</string>
     <string name="about_title">Acerca de</string>
     <string name="about_content">
         Práctica 5\n
@@ -22,4 +23,22 @@
     <string name="ok_button">OK</string>
     <string name="ordena_titulo">Ordenar por</string>
     <string name="ordena_contenido">Ordenado por&#160;</string> <!-- Valor unicode del espacio -->
+    <string name="preference_file">preferencias</string>
+    <string name="pref_key_ultimo_dia">pref_ultimo_dia</string>
+    <string name="title_activity_preferencias">PreferenciasActivity</string>
+
+    <!-- Preference Titles -->
+    <string name="messages_header">Datos personales</string>
+    <string name="sync_header">Configuración</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>
