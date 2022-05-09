@@ -52,10 +52,6 @@ public class DiarioAdapter extends RecyclerView.Adapter<DiarioAdapter.DiarioView
                     holder.ivImagen.setImageResource(R.drawable.smile);
                     break;
             }
-        } else {
-            holder.tvResumen.setText("Vacío");
-            holder.tvFecha.setText("Vacío");
-            holder.ivImagen.setImageResource(R.drawable.neutral);
         }
     }
 
@@ -70,10 +66,10 @@ public class DiarioAdapter extends RecyclerView.Adapter<DiarioAdapter.DiarioView
 
     public class DiarioViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvResumen;
-        private TextView tvFecha;
-        private ImageView ivImagen;
-        private Button btBorrar;
+        private final TextView tvResumen;
+        private final TextView tvFecha;
+        private final ImageView ivImagen;
+        private final Button btBorrar;
 
         public DiarioViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -94,6 +90,10 @@ public class DiarioAdapter extends RecyclerView.Adapter<DiarioAdapter.DiarioView
                         listenerItem.onItemClickItem(listaDiario.get(DiarioViewHolder.this.getAbsoluteAdapterPosition()));
                 }
             });
+        }
+
+        public DiaDiario getDia() {
+            return listaDiario.get(DiarioViewHolder.this.getBindingAdapterPosition());
         }
     }
 
