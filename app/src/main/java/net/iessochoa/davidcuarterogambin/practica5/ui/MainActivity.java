@@ -24,6 +24,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.preference.PreferenceManager;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -55,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
     Toolbar toolbar;
     RecyclerView rvLista;
     SearchView svBusqueda;
+
+    SharedPreferences sharedPreferences;
 
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -261,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
         long ultimoDia = sharedPref.getLong(getString(R.string.pref_key_ultimo_dia), 0);
 
         //mostramos el resultado
-        Toast.makeText(this, "El último día editado " + DiaDiario.getFechaFormatoLocal(new Date(ultimoDia)), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "El último día editado: " + DiaDiario.getFechaFormatoLocal(new Date(ultimoDia)), Toast.LENGTH_LONG).show();
     }
 
     // ******************* Acciones ***********************
@@ -296,6 +299,31 @@ public class MainActivity extends AppCompatActivity {
         });
         dialogoEliminar.show();
     }
+
+    // ******************* Opciones ***********************
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String set_nombre = sharedPreferences.getString("nombre", "");
+        String set_genero = sharedPreferences.getString("genero", "");
+        int pantalla = (getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK);
+
+        if ((pantalla == Configuration.SCREENLAYOUT_SIZE_LARGE) || pantalla == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
+            setTitle("El diario de: " + set_nombre);
+        }
+
+        if (set_genero.equalsIgnoreCase("masculino")) {
+            rvLista.setBackgroundResource(R.color.masculino);
+        } else if (set_genero.equalsIgnoreCase("femenino")) {
+            rvLista.setBackgroundResource(R.color.femenino);
+        } else if (set_genero.equalsIgnoreCase("otro")) {
+            rvLista.setBackgroundResource(R.color.otro);
+        }
+    }
+
+    // ******************* Inicio de views ***********************
 
     private void iniciaViews() {
         fabNuevo = findViewById(R.id.fabNuevo);
