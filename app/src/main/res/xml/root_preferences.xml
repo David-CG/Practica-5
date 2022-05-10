@@ -4,17 +4,24 @@
     <PreferenceCategory app:title="@string/messages_header">
 
         <EditTextPreference
+            android:id="@+id/set_nombre"
+            app:key="nombre"
+            app:title="Tu nombre"
+            app:useSimpleSummaryProvider="true" />
 
-            app:key="signature"
-            app:title="@string/signature_title"
+        <EditTextPreference
+            android:id="@+id/set_cumple"
+            app:key="cumple"
+            app:title="Fecha de cumpleaños"
             app:useSimpleSummaryProvider="true" />
 
         <ListPreference
+            android:id="@+id/set_genero"
             app:defaultValue="false"
             app:entries="@array/genero_entries"
             app:entryValues="@array/genero_values"
-            app:key="reply"
-            app:title="@string/reply_title"
+            app:key="genero"
+            app:title="Género"
             app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
@@ -23,11 +30,11 @@
 
         <SwitchPreferenceCompat
             android:id="@+id/sw_avisa"
-            app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
+            android:icon="@android:drawable/ic_popup_reminder"
+            app:icon="@android:drawable/ic_popup_reminder"
+            app:key="aviso"
+            app:summary="Aviso diario"
+            app:title="Avisar escribir en diario" />
 
     </PreferenceCategory>
 
