@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/clRoot"
+    android:id="@+id/clPrincipal"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.EdicionDiaActivity">
@@ -54,39 +54,50 @@
                 android:id="@+id/etResumen"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="2dp"
+                android:layout_marginBottom="16dp"
                 android:ems="10"
                 android:hint="@string/Resumen_del_dia"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
                 android:minHeight="48dp"
-                app:layout_constraintBottom_toBottomOf="@+id/ivFecha"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/ivFecha"
-                app:layout_constraintTop_toTopOf="@+id/ivFecha" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/tvValoracion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
                 android:text="@string/Valorar_vida"
+                app:layout_constraintBottom_toTopOf="@+id/etResumen"
                 app:layout_constraintStart_toStartOf="@+id/tvFecha"
                 app:layout_constraintTop_toBottomOf="@+id/tvFecha" />
 
             <Spinner
                 android:id="@+id/spValoracion"
-                android:layout_width="100dp"
-                android:layout_height="50dp"
+                android:layout_width="96dp"
+                android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:minHeight="48dp"
                 android:spinnerMode="dropdown"
                 app:layout_constraintBottom_toBottomOf="@+id/tvValoracion"
                 app:layout_constraintStart_toEndOf="@+id/tvValoracion"
                 app:layout_constraintTop_toTopOf="@+id/tvValoracion"
-                tools:ignore="SpeakableTextPresentCheck" />
+                tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+            <ImageView
+                android:id="@+id/ivFotoDia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                app:layout_constraintBottom_toTopOf="@+id/etResumen"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/spValoracion"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_launcher_foreground" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -97,7 +108,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="158dp" />
+        app:layout_constraintGuide_percent="0.3" />
 
     <ScrollView
         android:id="@+id/scrollContenido"
@@ -132,7 +143,19 @@
         android:layout_margin="16dp"
         android:src="@android:drawable/ic_menu_save"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@id/clRoot"
+        app:layout_constraintEnd_toEndOf="@id/clPrincipal"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabImagen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:clickable="false"
+        app:layout_constraintBottom_toTopOf="@+id/fabGuardar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_gallery"
         tools:ignore="SpeakableTextPresentCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

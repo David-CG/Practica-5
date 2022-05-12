@@ -1,24 +1,37 @@
 package net.iessochoa.davidcuarterogambin.practica5.ui;
 
+import static android.Manifest.permission.CAMERA;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.icu.util.Calendar;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.provider.Settings;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import net.iessochoa.davidcuarterogambin.practica5.R;
 import net.iessochoa.davidcuarterogambin.practica5.model.DiaDiario;
@@ -31,13 +44,17 @@ import java.util.Date;
 public class EdicionDiaActivity extends AppCompatActivity {
 
     static final String EXTRA_DIA = "net.iessochoa.davidcuartero.practica5.EdicionDiaActivity.DiaCreado";
+    private static final int STATUS_CODE_SELECCION_IMAGEN = 300;
+    private static final int MY_PERMISSIONS = 100;
 
+    ConstraintLayout clPrincipal;
     TextView tvFecha;
     Date fecha;
-    ImageView ivFecha;
+    ImageView ivFecha, ivFotoDia;
     EditText etResumen, etContenido;
     Spinner spValoracion;
-    FloatingActionButton fabGuardar;
+    FloatingActionButton fabGuardar, fabImagen;
+    private Uri uriFoto = null;
 
     DiaDiario diaDiario;
 
@@ -90,6 +107,13 @@ public class EdicionDiaActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        fabImagen.setOnClickListener(view -> {
+            ocultarTeclado();
+            if (noNecesarioSolicitarPermisos()) {
+                muestraOpcionesImagen();
+            }
+        });
     }
 
     // Crea el diálogo de calendario para escoger la fecha deseada.
@@ -131,14 +155,129 @@ public class EdicionDiaActivity extends AppCompatActivity {
         editor.apply();
     }
 
+    private void elegirGaleria() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(Intent.createChooser(intent, "Seleccione una imagen"), STATUS_CODE_SELECCION_IMAGEN);
+    }
+
+    private void muestraFoto() {
+        Glide.with(this).load(uriFoto).into(ivFotoDia);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case STATUS_CODE_SELECCION_IMAGEN:
+                    uriFoto = data.getData();
+                    muestraFoto();
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[]
+            permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == MY_PERMISSIONS) {
+            if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permisos aceptados", Toast.LENGTH_SHORT).show();
+                muestraOpcionesImagen();
+            } else {
+                //si no se aceptan los permisos
+                muestraExplicacionDenegacionPermisos();
+            }
+        }
+    }
+
+    private void muestraOpcionesImagen() {
+        final CharSequence[] option = {getString(R.string.tomar_foto), getString(R.string.elegir_de_la_galería), getString(android.R.string.cancel)};
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(android.R.string.dialog_alert_title);
+        builder.setItems(option, (dialog, which) -> {
+            switch (which) {
+                case 0:
+                    // abrirCamara(); // opcional
+                    break;
+                case 1:
+                    elegirGaleria();
+                    break;
+            }
+            dialog.dismiss();
+        });
+        builder.show();
+    }
+
+    private boolean noNecesarioSolicitarPermisos() {
+        // si la versión es inferior a la 6
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            return true;
+        // comprobamos si tenemos los permisos
+        if ((checkSelfPermission(WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) && (checkSelfPermission(CAMERA) == PackageManager.PERMISSION_GRANTED))
+            return true;
+        // indicamos al usuario porqué necesitamos los permisos siempre que no
+        // haya indicado que no lo volvamos a hacer
+        if ((shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE)) || (shouldShowRequestPermissionRationale(CAMERA))) {
+            Snackbar.make(clPrincipal, "Necesito los permisos para poder elegir una foto",
+                    Snackbar.LENGTH_INDEFINITE).setAction(android.R.string.ok,
+                    v -> requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, CAMERA}, MY_PERMISSIONS)).show();
+        } else {
+            //pedimos permisos sin indicar el porqué
+            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, CAMERA}, MY_PERMISSIONS);
+        }
+        //necesario pedir permisos
+        return false;
+    }
+
+    /**
+     * Si se deniegan los permisos mostramos las opciones de la aplicación
+     * para que el usuario acepte los permisos
+     */
+    private void muestraExplicacionDenegacionPermisos() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Petición de Permisos");
+        builder.setMessage("Necesito los permisos para seleccionar una foto");
+        builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
+            Intent intent = new Intent();
+
+            intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+            Uri uri = Uri.fromParts("package", getPackageName(), null);
+            intent.setData(uri);
+            startActivity(intent);
+        });
+        builder.setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+            dialog.dismiss();
+            finish();
+        });
+        builder.show();
+    }
+
+    /**
+     * Permite ocultar el teclado
+     */
+    private void ocultarTeclado() {
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        // mgr.showSoftInput(etDatos, InputMethodManager.HIDE_NOT_ALWAYS);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(etResumen.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(etContenido.getWindowToken(), 0);
+        }
+    }
+
 
     // Inicia los componentes de la activity.
     private void iniciaViews() {
         tvFecha = findViewById(R.id.tvFecha);
         ivFecha = findViewById(R.id.ivFecha);
+        ivFotoDia = findViewById(R.id.ivFotoDia);
         etResumen = findViewById(R.id.etResumen);
         etContenido = findViewById(R.id.etContenido);
         spValoracion = findViewById(R.id.spValoracion);
         fabGuardar = findViewById(R.id.fabGuardar);
+        fabImagen = findViewById(R.id.fabImagen);
+        clPrincipal = findViewById(R.id.clPrincipal);
     }
 }

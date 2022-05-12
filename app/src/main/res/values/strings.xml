@@ -26,6 +26,9 @@
     <string name="preference_file">preferencias</string>
     <string name="pref_key_ultimo_dia">pref_ultimo_dia</string>
     <string name="title_activity_preferencias">PreferenciasActivity</string>
+    <string name="tomar_foto">Tomar foto</string>
+    <string name="elegir_de_la_galería">Elegir de la galería</string>
+
 
     <!-- Preference Titles -->
     <string name="messages_header">Datos personales</string>
