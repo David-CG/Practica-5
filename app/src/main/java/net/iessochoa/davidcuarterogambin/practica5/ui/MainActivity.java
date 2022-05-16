@@ -80,13 +80,12 @@ public class MainActivity extends AppCompatActivity {
 
         // ****************************** Controles RecyclerView ***********************************
 
-        // Para editar hay que pulsar en el cardView y lanza una activity para obtener resultado
+        // Para editar hay que pulsar el cardView y lanza una activity para obtener resultado
         diarioAdapter.setOnClickItemListener(diaDiario -> {
             Intent intent = new Intent(MainActivity.this, EdicionDiaActivity.class);
             intent.putExtra(EdicionDiaActivity.EXTRA_DIA, diaDiario);
             startActivityForResult(intent, REQUEST_EDITA_DIA);
         });
-
 
         diarioAdapter.setOnClickBorrarListener(this::eliminarDia);
 
@@ -119,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // ******************************** Orientación pantalla ***********************************
-        // Si la pantalla está en horizontal
+        // Si la pantalla está en horizontal mostrar los días en dos columnas
         int orientacion = getResources().getConfiguration().orientation;
         if (orientacion == Configuration.ORIENTATION_PORTRAIT)
             rvLista.setLayoutManager(new LinearLayoutManager(this));
@@ -127,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             rvLista.setLayoutManager(new GridLayoutManager(this, 2));
 
         // *************************************** Swiper ******************************************
-
+        // Cuando se hace swipe a un día, se invoca al método de eliminar día
         ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT |
                 ItemTouchHelper.RIGHT) {
             @Override
@@ -147,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // ********************* Menu *************************
-    // Añade el menú y los botones del menu con sus respectivas acciones
+    // Añade el menu y los botones del menu con sus respectivas acciones
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -156,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    // Acciones de los botones del menú
     @SuppressLint("NonConstantResourceId")
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity {
         }).show();
     }
 
-    // Clase que crea el diálogo Acerca de
+    // Clase que crea el diálogo Acerca de...
     public static class DialogoAcercaDe extends DialogFragment {
         @NonNull
         @Override
@@ -220,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Dialogo que muestra la media de valoración de los días del diario
     private void dialogoValorVida() {
 
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
@@ -254,7 +255,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
+    // Muestra un toast con la fecha del último día editado
     private void muestraUltimoDia() {
 
         //recuperamos las preferencias
@@ -269,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
 
     // ******************* Acciones ***********************
 
+    // Acciones de crear o editar dia
     @RequiresApi(api = Build.VERSION_CODES.N)
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
@@ -289,6 +291,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Acción de eliminar día
     private void eliminarDia(DiaDiario diaDiario) {
         AlertDialog.Builder dialogoEliminar = new AlertDialog.Builder(MainActivity.this);
         dialogoEliminar.setTitle(R.string.titulo_eliminar);
@@ -306,14 +309,18 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        // Recoge las opciones de nombre, género y tamaño de pantalla
         String set_nombre = sharedPreferences.getString("nombre", "");
         String set_genero = sharedPreferences.getString("genero", "");
         int pantalla = (getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK);
 
+        // Si la pantalla es grande, muestra un titulo con el nombre introducido en opciones
         if ((pantalla == Configuration.SCREENLAYOUT_SIZE_LARGE) || pantalla == Configuration.SCREENLAYOUT_SIZE_XLARGE) {
             setTitle("El diario de: " + set_nombre);
         }
 
+        // Dependiendo del género introducido en opciones, cambia el color de fondo
         if (set_genero.equalsIgnoreCase("masculino")) {
             rvLista.setBackgroundResource(R.color.masculino);
         } else if (set_genero.equalsIgnoreCase("femenino")) {

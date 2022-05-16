@@ -15,6 +15,8 @@ import io.reactivex.Single;
 @Dao
 public interface DiarioDao {
 
+    // Opciones CRUD
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(DiaDiario diaDiario);
 

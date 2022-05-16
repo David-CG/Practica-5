@@ -66,6 +66,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
         // Inicia las views de la activity
         iniciaViews();
 
+        // Acción al pulsar el icono de fecha
         ivFecha.setOnClickListener(view -> onClickFecha());
 
         // Spinner
@@ -92,6 +93,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
             } else {
                 if (diaDiario != null) {
                     diaDiario.setFecha(fecha);
+                    guardarDiaPreferencias(fecha);
                     diaDiario.setValoracionDia(Integer.parseInt(spValoracion.getSelectedItem().toString()));
                     diaDiario.setContenido(etContenido.getText().toString());
                     diaDiario.setResumen(etResumen.getText().toString());
@@ -100,6 +102,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
                     setResult(RESULT_OK, intent);
                 } else {
                     diaDiario = new DiaDiario(fecha, Integer.parseInt(spValoracion.getSelectedItem().toString()), etResumen.getText().toString(), etContenido.getText().toString());
+                    guardarDiaPreferencias(fecha);
                     Intent intent = getIntent();
                     intent.putExtra(EXTRA_DIA, diaDiario);
                     setResult(RESULT_OK, intent);
@@ -108,7 +111,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
             }
         });
 
-
+        // Acción del boton de añadir foto
         fabImagen.setOnClickListener(view -> {
             ocultarTeclado();
             if (noNecesarioSolicitarPermisos()) {
@@ -142,6 +145,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
         dialogoCampos.show();
     }
 
+    // Guarda la fecha del último día editado
     private void guardarDiaPreferencias(Date fecha) {
         //buscamos el fichero de preferencias
         SharedPreferences sharedPref = this.getSharedPreferences(getString(R.string.preference_file), Context.MODE_PRIVATE);
@@ -155,31 +159,31 @@ public class EdicionDiaActivity extends AppCompatActivity {
         //finalizamos
         editor.apply();
     }
-    // lanza una activity para elegir una imagen de la galería
+    // lanza una activity para elegir una imágen de la galería
     private void elegirGaleria() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
         startActivityForResult(Intent.createChooser(intent, getString(R.string.seleccione_imagen)), STATUS_CODE_SELECCION_IMAGEN);
     }
 
-    // muestra la foto elegida en
+    // muestra la foto elegida en el image view
     private void muestraFoto() {
         Glide.with(this).load(uriFoto).into(ivFotoDia);
     }
 
+    // Resultado de la selección de imágen y si se ha elegido una imágen la muestra
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            switch (requestCode) {
-                case STATUS_CODE_SELECCION_IMAGEN:
-                    uriFoto = data.getData();
-                    muestraFoto();
-                    break;
+            if (requestCode == STATUS_CODE_SELECCION_IMAGEN) {
+                uriFoto = data.getData();
+                muestraFoto();
             }
         }
     }
 
+    // Resultado de permisos, si se aceptan se muestra un toast y las opciones para elegir foto
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[]
             permissions, @NonNull int[] grantResults) {
@@ -195,6 +199,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
         }
     }
 
+    // Muestra un diálogo con las opciones de abrir la cámara, elegir una foto de la galería y cancelar.
     private void muestraOpcionesImagen() {
         final CharSequence[] option = {getString(R.string.tomar_foto), getString(R.string.elegir_de_la_galería), getString(android.R.string.cancel)};
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);

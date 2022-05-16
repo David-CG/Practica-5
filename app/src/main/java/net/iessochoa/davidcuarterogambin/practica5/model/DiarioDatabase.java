@@ -40,6 +40,8 @@ public abstract class DiarioDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
+    // Inserta datos de prueba al iniciar la app por primera vez
+
     private static final RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
