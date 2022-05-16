@@ -291,8 +291,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void eliminarDia(DiaDiario diaDiario) {
         AlertDialog.Builder dialogoEliminar = new AlertDialog.Builder(MainActivity.this);
-        dialogoEliminar.setTitle("Aviso");
-        dialogoEliminar.setMessage("¿Está seguro que desea eliminar esta tarea?");
+        dialogoEliminar.setTitle(R.string.titulo_eliminar);
+        dialogoEliminar.setMessage(R.string.mensaje_eliminar);
 
         dialogoEliminar.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> diarioViewModel.delete(diaDiario));
         dialogoEliminar.setNegativeButton(android.R.string.no, (dialogInterface, i) -> {

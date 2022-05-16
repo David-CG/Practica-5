@@ -108,6 +108,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
             }
         });
 
+
         fabImagen.setOnClickListener(view -> {
             ocultarTeclado();
             if (noNecesarioSolicitarPermisos()) {
@@ -154,13 +155,14 @@ public class EdicionDiaActivity extends AppCompatActivity {
         //finalizamos
         editor.apply();
     }
-
+    // lanza una activity para elegir una imagen de la galería
     private void elegirGaleria() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
-        startActivityForResult(Intent.createChooser(intent, "Seleccione una imagen"), STATUS_CODE_SELECCION_IMAGEN);
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.seleccione_imagen)), STATUS_CODE_SELECCION_IMAGEN);
     }
 
+    // muestra la foto elegida en
     private void muestraFoto() {
         Glide.with(this).load(uriFoto).into(ivFotoDia);
     }
@@ -184,7 +186,7 @@ public class EdicionDiaActivity extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == MY_PERMISSIONS) {
             if (grantResults.length == 2 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permisos aceptados", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.permisos_aceptados, Toast.LENGTH_SHORT).show();
                 muestraOpcionesImagen();
             } else {
                 //si no se aceptan los permisos
@@ -221,9 +223,8 @@ public class EdicionDiaActivity extends AppCompatActivity {
         // indicamos al usuario porqué necesitamos los permisos siempre que no
         // haya indicado que no lo volvamos a hacer
         if ((shouldShowRequestPermissionRationale(WRITE_EXTERNAL_STORAGE)) || (shouldShowRequestPermissionRationale(CAMERA))) {
-            Snackbar.make(clPrincipal, "Necesito los permisos para poder elegir una foto",
-                    Snackbar.LENGTH_INDEFINITE).setAction(android.R.string.ok,
-                    v -> requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, CAMERA}, MY_PERMISSIONS)).show();
+            Snackbar.make(clPrincipal, R.string.necesito_permisos, Snackbar.LENGTH_INDEFINITE).setAction(android.R.string.ok, v ->
+                    requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, CAMERA}, MY_PERMISSIONS)).show();
         } else {
             //pedimos permisos sin indicar el porqué
             requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, CAMERA}, MY_PERMISSIONS);
@@ -238,8 +239,8 @@ public class EdicionDiaActivity extends AppCompatActivity {
      */
     private void muestraExplicacionDenegacionPermisos() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Petición de Permisos");
-        builder.setMessage("Necesito los permisos para seleccionar una foto");
+        builder.setTitle(R.string.peticion_permisos);
+        builder.setMessage(R.string.necesito_permisos);
         builder.setPositiveButton(android.R.string.ok, (dialog, which) -> {
             Intent intent = new Intent();
 

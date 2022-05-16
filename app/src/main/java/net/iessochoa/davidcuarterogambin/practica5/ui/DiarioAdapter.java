@@ -35,13 +35,14 @@ public class DiarioAdapter extends RecyclerView.Adapter<DiarioAdapter.DiarioView
         return new DiarioViewHolder(itemView);
     }
 
+    // asigna los image views de humor a la puntuación del día
     @Override
     public void onBindViewHolder(@NonNull DiarioViewHolder holder, int position) {
         if (listaDiario != null) {
             final DiaDiario diario = listaDiario.get(position);
             int valor = diario.getValoracionResumida();
             holder.tvResumen.setText(diario.getResumen());
-            //holder.tvFecha.setText(diario.getFechaFormatoLocal());
+            //holder.tvFecha.setText(diario.getFechaFormatoLocal()); // hace que la app de error y se cierre
             switch (valor) {
                 case 1:
                     holder.ivImagen.setImageResource(R.drawable.sad);
@@ -56,6 +57,7 @@ public class DiarioAdapter extends RecyclerView.Adapter<DiarioAdapter.DiarioView
         }
     }
 
+    // cantidad de dias en la lista
     @Override
     public int getItemCount() {
         if (listaDiario != null) {
@@ -65,6 +67,7 @@ public class DiarioAdapter extends RecyclerView.Adapter<DiarioAdapter.DiarioView
         }
     }
 
+    // asigna las acciones de borrar y editar al hacer click en el item o el botón de eliminar
     public class DiarioViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView tvResumen;

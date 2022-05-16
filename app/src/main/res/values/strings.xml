@@ -44,4 +44,10 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="seleccione_imagen">Seleccione una imagen</string>
+    <string name="permisos_aceptados">Permisos aceptados</string>
+    <string name="necesito_permisos">Necesito los permisos para poder elegir una foto</string>
+    <string name="peticion_permisos">Petición de Permisos</string>
+    <string name="titulo_eliminar">Aviso</string>
+    <string name="mensaje_eliminar">¿Está seguro que desea eliminar esta tarea?</string>
 </resources>
